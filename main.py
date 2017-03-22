@@ -24,7 +24,7 @@ result = cv2.merge((b, g, r))
 # cv2.imwrite("output_images/" + file, result)
 cv2.imwrite("output_images/solidWhiteCurve.jpg", result)
 
-    # plt.imshow(result, cmap='gray')
-
-    # plt.colorbar()
-    # plt.show()
+# plt.imshow(result, cmap='gray')
+# #
+# plt.colorbar()
+# plt.show()
