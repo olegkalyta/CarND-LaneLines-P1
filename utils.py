@@ -100,9 +100,6 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
                     rc.append(center)
                     rm.append(slope)
 
-    # util_draw_line(img, leftlines, [255, 0, 0])
-    # util_draw_line(img, rightlines, [255, 255, 0])
-
     r_slope = np.sum(rm) / len(rm)
     l_slope = np.sum(lm) / len(lm)
 
@@ -113,7 +110,7 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
     rightX, rightY = r_center
 
     lefty1 = - (l_slope*(leftX - 480) - leftY)
-    lefty2 = - (l_slope*(leftX - 150) - leftY)
+    lefty2 = - (l_slope*(leftX - 100) - leftY)
 
     int_lefty1 = int(round(lefty1))
     int_lefty2 = int(round(lefty2))
@@ -125,14 +122,8 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
     int_righty1 = int(round(righty1))
     int_righty2 = int(round(righty2))
 
-    # arr = np.array([[(540, lefty1), (250, lefty2)]], dtype=np.int32)
-
-    # print((540, lefty1), (250, lefty2))
-    cv2.line(img, (480, int_lefty1), (150, int_lefty2), [255, 0, 255], 15)
+    cv2.line(img, (480, int_lefty1), (100, int_lefty2), [255, 0, 255], 15)
     cv2.line(img, (480, int_righty1), (900, int_righty2), [255, 0, 255], 15)
-
-    # print((480, int_righty1), (900, int_righty2))
-
 
 def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
     """
