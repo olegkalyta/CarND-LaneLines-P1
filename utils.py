@@ -4,6 +4,7 @@ import matplotlib.image as mpimg
 import numpy as np
 import cv2
 
+
 def grayscale(img):
     """Applies the Grayscale transform
     This will return an image with only one color channel
@@ -50,6 +51,12 @@ def region_of_interest(img, vertices):
     return masked_image
 
 
+def util_draw_line(img, lines, color):
+    for line in lines:
+        for x1, y1, x2, y2 in line:
+            cv2.line(img, (x1, y1), (x2, y2), color, 2)
+
+
 def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
     """
     NOTE: this is the function you might want to use as a starting point once you want to
@@ -67,9 +74,43 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
     If you want to make the lines semi-transparent, think about combining
     this function with the weighted_img() function below
     """
+    # print(len(lines))
+    leftlines = []
+    rightlines = []
+    lc = []
+    lm = []
+    rc = []
+    rm = []
+
+    height, width, channels = img.shape
+    print(height/2)
+
     for line in lines:
         for x1, y1, x2, y2 in line:
-            cv2.line(img, (x1, y1), (x2, y2), color, thickness)
+            slope = (y2 - y1) / (x2 - x1)
+            center = [(x1 + x2) / 2, (y1 + y2) / 2]
+
+            if slope < 0 and slope > -2:
+                lc.append(center)
+                lm.append(slope)
+                leftlines.append(line)
+            else:
+                if slope > 0 and slope < 2:
+                    rightlines.append(line)
+                    rc.append(center)
+                    rm.append(slope)
+
+    util_draw_line(img, leftlines, [255, 0, 0])
+    util_draw_line(img, rightlines, [255, 255, 0])
+
+    r_slope = np.sum(rm) / len(rm)
+    l_slope = np.sum(lm) / len(lm)
+
+    l_center = np.divide(np.sum(lc, axis=0), len(lc))
+    r_center = np.divide(np.sum(rc, axis=0), len(rc))
+
+    print('left: ', l_slope, l_center)
+    print('right: ', r_slope, r_center)
 
 
 def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
